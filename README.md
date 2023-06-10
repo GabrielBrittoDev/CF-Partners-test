@@ -14,6 +14,8 @@ ___
 
 ## Technologies used
 
+- Codeigniter 4.3.5
+- SmartAdmin 4.5.1
 - MySQL 8.0.32
 - PHP 8.1
 - Nginx 1.19
