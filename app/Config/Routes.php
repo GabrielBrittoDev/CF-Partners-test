@@ -48,3 +48,4 @@ if (is_file(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
 }
 
 require APPPATH . 'Config/Routes/V1/User.php';
+require APPPATH . 'Config/Routes/V1/Auth.php';
