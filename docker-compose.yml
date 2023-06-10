@@ -1,0 +1,51 @@
+version: '3'
+services:
+    app:
+        tty: true
+        user: 1000:1000
+        container_name: cfpartners-app
+        build:
+            context: ./
+            dockerfile: docker/php/Dockerfile
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        depends_on:
+            - db
+        volumes:
+            - ./docker/php/nginx/www.conf:/etc/php-fpm.d/www.conf
+            - ./:/var/www
+    db:
+        image: mysql:8.0.32
+        user: 1000:1000
+        tty: true
+        security_opt:
+            - seccomp:unconfined
+        container_name: cfpartners-mysql
+        ports:
+            - "30001:3306"
+        volumes:
+            - ./docker/volumes/mysql:/var/lib/mysql
+            - ./docker/mysql/conf.cnf:/etc/mysql/conf.d/custom-conf.cnf
+            - ./docker/mysql:/docker-entrypoint-initdb.d
+        healthcheck:
+            test: "/usr/bin/mysql --user=root --password=pass --execute \"SHOW DATABASES;\""
+            interval: 2s
+            timeout: 20s
+            retries: 10
+        environment:
+            MYSQL_ROOT_PASSWORD: pass
+            MYSQL_DATABASE: cfpartners
+            MYSQL_USER: user
+            MYSQL_PASSWORD: pass
+        restart: always
+    web:
+        image: nginx:1.19
+        tty: true
+        container_name: cfpartners-web
+        volumes:
+            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./:/var/www
+        depends_on:
+            - app
+        ports:
+            - "30000:80"
