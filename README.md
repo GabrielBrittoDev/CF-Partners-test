@@ -12,6 +12,12 @@ In case of port conflicts, just need to change the ports inside the docker-compo
 
 ___
 
+## Useful commands
+
+* ``docker-compose exec app php spark db:seed UserSeeder`` This command generates 100 users on the database for test purposes.
+
+
+
 ## Technologies used
 
 - Codeigniter 4.3.5
